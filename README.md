@@ -66,6 +66,34 @@ Run it with:
 
 Commands in a function must not begin with `/`. Empty lines and comment lines are skipped. Files are read again on every execution, so changes do not require a game restart. Only directory datapacks are currently supported; ZIP datapacks and modern function macros are not.
 
+#### Troubleshooting: `Unknown function`
+
+This backport intentionally reads only the modern directory-datapack layout. The legacy Minecraft 1.12.2 directory below is **not** scanned:
+
+```text
+<world>/data/functions/<namespace>/<name>.mcfunction
+```
+
+If the game reports `Unknown function: namespace:name`, move the file into a directory datapack:
+
+```text
+<world>/datapacks/<any_pack_name>/data/<namespace>/functions/<name>.mcfunction
+```
+
+For example, this command:
+
+```mcfunction
+/function zhan_shen:ch1_aunt_house
+```
+
+requires this exact structure:
+
+```text
+<world>/datapacks/zhan_shen_pack/data/zhan_shen/functions/ch1_aunt_house.mcfunction
+```
+
+The `datapacks` and pack directories may need to be created manually. A `pack.mcmeta` file is not required by this mod's loader.
+
 ## Installation
 
 Download the release JAR and place it in the Minecraft 1.12.2 `mods` directory.
