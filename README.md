@@ -94,6 +94,39 @@ requires this exact structure:
 
 The `datapacks` and pack directories may need to be created manually. A `pack.mcmeta` file is not required by this mod's loader.
 
+#### Troubleshooting: WorldEdit and ForgeEssentials permissions
+
+Avoid wrapping WorldEdit commands in this form:
+
+```mcfunction
+execute as @p at @s run //pos1 -35 4 -7
+execute as @p at @s run //set minecraft:stone
+```
+
+The backported `/execute` uses an `ICommandSender` execution-context wrapper. ForgeEssentials and WorldEdit may not recognize that wrapper as the real player, even when the player has `worldedit.*` or is using cheats in a single-player world. This can produce repeated `You do not have permission to use this command` messages.
+
+When a player directly runs the function, put WorldEdit commands directly in the `.mcfunction` file instead:
+
+```mcfunction
+/pos1 -35 4 -7
+/pos2 35 4 7
+/set minecraft:stone
+/walls minecraft:stonebrick
+/schem save example_house
+```
+
+Use one leading `/` in this mod's `.mcfunction` files. The loader passes each line directly to `server.getCommandManager().executeCommand(sender, line)`, so it does not remove the chat command prefix.
+
+To grant WorldEdit permissions with ForgeEssentials:
+
+```mcfunction
+/p user <player> allow worldedit.*
+/p save
+/p reload
+```
+
+Granting the permission does not fix the wrapped-sender incompatibility; direct WorldEdit function lines are still recommended.
+
 ## Installation
 
 Download the release JAR and place it in the Minecraft 1.12.2 `mods` directory.
