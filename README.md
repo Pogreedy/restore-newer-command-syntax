@@ -117,6 +117,27 @@ When a player directly runs the function, put WorldEdit commands directly in the
 
 Use one leading `/` in this mod's `.mcfunction` files. The loader passes each line directly to `server.getCommandManager().executeCommand(sender, line)`, so it does not remove the chat command prefix.
 
+This differs from the in-game chat syntax:
+
+| Location | WorldEdit command |
+| --- | --- |
+| Minecraft chat | `//set minecraft:stone` |
+| This mod's `.mcfunction` file | `/set minecraft:stone` |
+
+Do **not** copy the two leading slashes from chat into the function file. For example, these lines are wrong and will produce repeated `Unknown command` messages:
+
+```mcfunction
+//pos1 -35 4 -7
+//pos2 35 4 7
+//set minecraft:stone
+```
+
+Error symptoms:
+
+- `You do not have permission to use this command`: the WorldEdit command is probably wrapped in `execute as/at`, so ForgeEssentials sees the wrapper instead of the player.
+- `Unknown command`: the WorldEdit command is probably written with `//` inside the function file; change it to one `/`.
+- `Executed function ..., ran N commands` does not currently guarantee that every line succeeded. The loader counts submitted non-comment lines, including lines rejected by another command.
+
 To grant WorldEdit permissions with ForgeEssentials:
 
 ```mcfunction
