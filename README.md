@@ -1,6 +1,6 @@
 # Restore the newer command syntax
 
-A Minecraft Forge 1.12.2 mod that backports useful parts of modern `/execute` and `/damage` commands.
+A Minecraft Forge 1.12.2 mod that backports useful parts of modern `/execute`, `/damage`, and `/function` commands.
 
 ## Requirements
 
@@ -29,7 +29,42 @@ The backport supports chained execution with:
 - Relative (`~`) and local (`^`) coordinates
 - Basic modern `@s` compatibility
 
-Features tied to modern datapacks, such as predicates and functions, are not available in Minecraft 1.12.2.
+Features tied to newer datapack systems, such as predicates, are not available in Minecraft 1.12.2.
+
+### Function
+
+```mcfunction
+/function <namespace>:<name>
+```
+
+Functions are read directly from directory datapacks in the current world:
+
+```text
+<world>/datapacks/<pack>/data/<namespace>/functions/<name>.mcfunction
+```
+
+For example, `example:test` is stored at:
+
+```text
+<world>/datapacks/my_pack/data/example/functions/test.mcfunction
+```
+
+Example `test.mcfunction`:
+
+```mcfunction
+# Lines beginning with # are comments.
+say Function executed successfully
+damage @p 4 magic
+execute as @p at @s run summon lightning_bolt ~ ~ ~
+```
+
+Run it with:
+
+```mcfunction
+/function example:test
+```
+
+Commands in a function must not begin with `/`. Empty lines and comment lines are skipped. Files are read again on every execution, so changes do not require a game restart. Only directory datapacks are currently supported; ZIP datapacks and modern function macros are not.
 
 ## Installation
 
