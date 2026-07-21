@@ -2,6 +2,7 @@ package com.example.restore_newer_command_syntax;
 
 import com.example.restore_newer_command_syntax.command.CommandExecute;
 import com.example.restore_newer_command_syntax.command.DamageCommand;
+import com.example.restore_newer_command_syntax.command.FunctionCommand;
 import com.example.restore_newer_command_syntax.proxy.IProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -32,6 +33,7 @@ public class ExampleMod {
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandExecute());
         event.registerServerCommand(new DamageCommand());
+        event.registerServerCommand(new FunctionCommand());
     }
 
 }
